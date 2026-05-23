@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VN Phu Quoc Travel | 富國島旅遊導覽</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --green: #2D4F32;
+      --mint: #9EBC9F;
+      --orange: #FFB703;
+      --cream: #FAF7F2;
+      --dark: #1a2e1c;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans TC', sans-serif; background: var(--cream); color: var(--green); overflow-x: hidden; }
+
+    .hero {
+      min-height: 100vh;
+      background: var(--dark);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(158,188,159,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 20%, rgba(255,183,3,0.08) 0%, transparent 50%),
+        linear-gradient(160deg, #0d1f0f 0%, #1a2e1c 40%, #0a1a0c 100%);
+    }
+    .hero-bg::before {
+      content:''; position:absolute;
+      width:700px; height:700px; border-radius:50%;
+      border:1px solid rgba(158,188,159,0.08);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+    }
+    .hero-bg::after {
+      content:''; position:absolute;
+      width:500px; height:500px; border-radius:50%;
+      border:1px solid rgba(255,183,3,0.06);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+    }
+    .hero-content { position:relative; z-index:2; padding:2rem; max-width:800px; }
+    .hero-badge {
+      display:inline-block; border:1px solid rgba(255,183,3,0.4);
+      color:var(--orange); font-size:0.65rem; font-weight:900;
+      letter-spacing:0.35em; padding:0.35rem 1.2rem; border-radius:100px;
+      margin-bottom:2rem; text-transform:uppercase;
+      opacity:0; animation:fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(3.5rem,10vw,7rem); font-weight:900;
+      color:#fff; line-height:1.0; margin-bottom:0.5rem;
+      opacity:0; animation:fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-title em { font-style:italic; color:var(--orange); }
+    .hero-sub {
+      color:var(--mint); font-size:clamp(1rem,2.5vw,1.25rem);
+      font-weight:300; letter-spacing:0.2em; margin-bottom:0.75rem;
+      opacity:0; animation:fadeUp 0.8s 0.55s forwards;
+    }
+    .hero-tagline {
+      color:rgba(255,255,255,0.35); font-size:0.8rem;
+      letter-spacing:0.15em; margin-bottom:3.5rem;
+      opacity:0; animation:fadeUp 0.8s 0.65s forwards;
+    }
+    .hero-scroll-hint {
+      position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
+      color:rgba(255,255,255,0.3); font-size:0.7rem; letter-spacing:0.2em;
+      display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+      opacity:0; animation:fadeUp 1s 1.4s forwards;
+    }
+    .scroll-line {
+      width:1px; height:40px;
+      background:linear-gradient(to bottom, rgba(255,183,3,0.6), transparent);
+      animation:scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(1);} 50%{opacity:1;transform:scaleY(1.2);} }
+
+    .attractions { padding:7rem 2rem; background:var(--green); }
+    .attractions-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto; }
+    .attraction-card {
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+      border-radius:1.5rem; overflow:hidden; transition:transform 0.3s,border-color 0.3s;
+    }
+    .attraction-card:hover { transform:translateY(-5px); border-color:var(--orange); }
+    .attraction-img { height:180px; overflow:hidden; }
+    .attraction-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .attraction-card:hover .attraction-img img { transform:scale(1.08); }
+    .attraction-body { padding:1.5rem; }
+    .attraction-body h3 { font-weight:900; color:#fff; margin-bottom:0.4rem; }
+    .attraction-body p { font-size:0.78rem; color:rgba(255,255,255,0.5); line-height:1.6; }
+
+    .itineraries { padding:7rem 2rem; background:var(--cream); }
+    .itinerary-list { max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:1rem; }
+    .itinerary-item {
+      display:flex; gap:1.5rem; align-items:flex-start;
+      background:#fff; border-radius:1.5rem; padding:2rem;
+      border-left:4px solid var(--mint); transition:border-color 0.3s,transform 0.3s;
+    }
+    .itinerary-item:hover { border-color:var(--orange); transform:translateX(4px); }
+    .itinerary-num { font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--mint); line-height:1; flex-shrink:0; width:2.5rem; }
+    .itinerary-item:hover .itinerary-num { color:var(--orange); }
+    .itinerary-text h4 { font-weight:900; color:var(--green); margin-bottom:0.4rem; font-size:1rem; }
+    .itinerary-text p { font-size:0.82rem; color:#888; line-height:1.6; }
+
+    .cta { background:var(--dark); padding:8rem 2rem; text-align:center; position:relative; overflow:hidden; }
+    .cta::before {
+      content:''; position:absolute;
+      width:600px; height:600px;
+      background:radial-gradient(circle, rgba(255,183,3,0.06) 0%, transparent 70%);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+    }
+    .cta-inner { position:relative; z-index:1; max-width:620px; margin:0 auto; }
+    .cta h2 { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,6vw,4rem); font-weight:900; color:#fff; line-height:1.1; margin-bottom:1.25rem; }
+    .cta h2 em { font-style:italic; color:var(--orange); }
+    .cta p { color:rgba(255,255,255,0.45); font-size:1rem; line-height:1.8; margin-bottom:3rem; }
+    .cta-btn {
+      display:inline-flex; align-items:center; gap:1rem;
+      background:var(--orange); color:var(--dark);
+      font-weight:900; font-size:1.1rem; padding:1.2rem 3rem;
+      border-radius:100px; text-decoration:none; border:none; cursor:pointer;
+      transition:transform 0.3s,box-shadow 0.3s;
+      box-shadow:0 8px 30px rgba(255,183,3,0.3);
+    }
+    .cta-btn:hover { transform:scale(1.06); box-shadow:0 12px 40px rgba(255,183,3,0.45); }
+    .cta-btn i { transition:transform 0.3s; }
+    .cta-btn:hover i { transform:translateX(4px); }
+    .cta-note { margin-top:1.5rem; color:rgba(255,255,255,0.2); font-size:0.72rem; letter-spacing:0.1em; }
+
+    @keyframes bounceDown { 0%,100%{transform:translateY(0);} 50%{transform:translateY(4px);} }
+    footer strong { color:rgba(255,255,255,0.6); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+    .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .stagger > * { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease,transform 0.6s ease; }
+    .stagger.visible > *:nth-child(1){opacity:1;transform:translateY(0);transition-delay:0s;}
+    .stagger.visible > *:nth-child(2){opacity:1;transform:translateY(0);transition-delay:0.1s;}
+    .stagger.visible > *:nth-child(3){opacity:1;transform:translateY(0);transition-delay:0.2s;}
+    .stagger.visible > *:nth-child(4){opacity:1;transform:translateY(0);transition-delay:0.3s;}
+    .stagger.visible > *:nth-child(5){opacity:1;transform:translateY(0);transition-delay:0.4s;}
+    .stagger.visible > *:nth-child(6){opacity:1;transform:translateY(0);transition-delay:0.5s;}
+    .stagger.visible > *:nth-child(7){opacity:1;transform:translateY(0);transition-delay:0.6s;}
+    .stagger.visible > *:nth-child(8){opacity:1;transform:translateY(0);transition-delay:0.7s;}
+    .stagger.visible > *:nth-child(9){opacity:1;transform:translateY(0);transition-delay:0.8s;}
+    .stagger.visible > *:nth-child(10){opacity:1;transform:translateY(0);transition-delay:0.9s;}
+    .stagger.visible > *:nth-child(11){opacity:1;transform:translateY(0);transition-delay:1.0s;}
+    .stagger.visible > *:nth-child(12){opacity:1;transform:translateY(0);transition-delay:1.1s;}
+    .stagger.visible > *:nth-child(13){opacity:1;transform:translateY(0);transition-delay:1.2s;}
+    .stagger.visible > *:nth-child(14){opacity:1;transform:translateY(0);transition-delay:1.3s;}
+
+    @media(max-width:600px){
+      .itinerary-item{padding:1.5rem;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 固定浮動快捷列 -->
+  <div id="float-skip" style="
+    position:fixed; bottom:1.8rem; left:50%; transform:translateX(-50%);
+    z-index:999; transition:opacity 0.4s, transform 0.4s;
+  ">
+    <a href="#cta" id="float-skip-btn" style="
+      display:inline-flex; align-items:center; gap:0.7rem;
+      background:rgba(26,46,28,0.82); backdrop-filter:blur(12px);
+      color:rgba(255,255,255,0.75); font-family:'Noto Sans TC',sans-serif;
+      font-size:0.85rem; font-weight:700; letter-spacing:0.06em;
+      padding:0.8rem 2rem; border-radius:100px;
+      border:1px solid rgba(255,255,255,0.15);
+      text-decoration:none;
+      box-shadow:0 8px 32px rgba(0,0,0,0.35);
+      transition:color 0.3s, border-color 0.3s, background 0.3s;
+    ">
+      突然有點懶，直接進入網站吧
+      <i class="fa-solid fa-arrow-down" style="font-size:0.75rem; animation:bounceDown 1.8s infinite ease-in-out;"></i>
+    </a>
+  </div>
+
+  <!-- 固定社群按鈕 -->
+  <div style="
+    position:fixed; right:1.5rem; top:50%; transform:translateY(-50%);
+    z-index:999; display:flex; flex-direction:column; gap:0.75rem;
+  ">
+    <a href="https://www.instagram.com/vn_travelstudio?igsh=cDBtNjRtdzl4aml2&utm_source=qr" target="_blank" title="Instagram" style="
+      display:flex; align-items:center; justify-content:center;
+      width:2.8rem; height:2.8rem; border-radius:50%;
+      background:rgba(26,46,28,0.75); backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.15);
+      color:#fff; font-size:1.1rem; text-decoration:none;
+      box-shadow:0 4px 16px rgba(0,0,0,0.3);
+      transition:transform 0.3s, background 0.3s, border-color 0.3s;
+    " onmouseover="this.style.transform='scale(1.15)';this.style.background='linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)';this.style.borderColor='transparent';"
+       onmouseout="this.style.transform='scale(1)';this.style.background='rgba(26,46,28,0.75)';this.style.borderColor='rgba(255,255,255,0.15)';">
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+    <a href="https://www.facebook.com/TamarindTravelPQ?mibextid=wwXIfr" target="_blank" title="Facebook" style="
+      display:flex; align-items:center; justify-content:center;
+      width:2.8rem; height:2.8rem; border-radius:50%;
+      background:rgba(26,46,28,0.75); backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.15);
+      color:#fff; font-size:1.1rem; text-decoration:none;
+      box-shadow:0 4px 16px rgba(0,0,0,0.3);
+      transition:transform 0.3s, background 0.3s, border-color 0.3s;
+    " onmouseover="this.style.transform='scale(1.15)';this.style.background='#1877F2';this.style.borderColor='transparent';"
+       onmouseout="this.style.transform='scale(1)';this.style.background='rgba(26,46,28,0.75)';this.style.borderColor='rgba(255,255,255,0.15)';">
+      <i class="fa-brands fa-facebook-f"></i>
+    </a>
+  </div>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">VIETNAM · PHU QUOC ISLAND</div>
+      <h1 class="hero-title">VN PHU QUOC<br><em>TRAVEL</em></h1>
+      <p class="hero-sub">Tamarind富國島景點預覽</p>
+      <p class="hero-tagline">景點 &nbsp;•&nbsp; 行程 &nbsp;•&nbsp; 在地體驗</p>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+
+
+  <section class="attractions">
+    <div class="section-header reveal">
+      <span class="section-label">Must-See</span>
+      <h2 style="color:#fff;">富國島知名景點與活動</h2>
+    </div>
+    <div class="attractions-grid stagger">
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/grand-world.png.jpg" alt="富國大世界"></div>
+        <div class="attraction-body"><h3>富國大世界</h3><p>24 小時不夜城，威尼斯運河與竹屋建築所在地，夜晚璀璨奪目。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/cable-car.jpg" alt="跨海纜車"></div>
+        <div class="attraction-body"><h3>跨海纜車</h3><p>世界最長跨海纜車，俯瞰碧綠海域，直達香島水樂園。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/diving.jpg" alt="跳島行程"></div>
+        <div class="attraction-body"><h3>跳島行程</h3><p>深入指甲島與雲腿島，享受無人島午餐與清澈海水浮潛。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/starfish.jpg" alt="海星沙灘"></div>
+        <div class="attraction-body"><h3>海星沙灘</h3><p>北島秘境，清澈海水中與紅海星近距離接觸。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/night-market.jpg" alt="陽東夜市"></div>
+        <div class="attraction-body"><h3>陽東夜市</h3><p>島上美食核心，新鮮海鮮與道地小吃齊聚，在地口味盡在此。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/sunset-town.jpg" alt="日落小鎮"></div>
+        <div class="attraction-body"><h3>日落小鎮</h3><p>地中海風格建築，親吻橋上捕捉絕美日落，網美朝聖必訪。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/water-show.jpg" alt="水舞燈光秀"></div>
+        <div class="attraction-body"><h3>水舞燈光秀</h3><p>大世界內每晚精彩上演，水柱與燈光音樂完美交融，令人震撼。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/vinwonders.jpg" alt="Vinwonder珍珠樂園"></div>
+        <div class="attraction-body"><h3>Vinwonder珍珠樂園</h3><p>越南最大主題樂園，夢幻城堡、水上樂園與巨龜水族館一票暢玩。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/safari.jpg" alt="Safari動物園"></div>
+        <div class="attraction-body"><h3>Safari 動物園</h3><p>東南亞最大開放式野生動物園，與長頸鹿、獅子零距離近距互動。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/basket-boat.jpg" alt="竹簍船"></div>
+        <div class="attraction-body"><h3>竹簍船</h3><p>越南特色圓形竹編小船，在紅樹林水道中旋轉漂流，趣味十足。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/pearl-farm.jpg" alt="珍珠養殖農場"></div>
+        <div class="attraction-body"><h3>珍珠養殖農場</h3><p>富國島以天然南洋珍珠聞名，親眼見證珍珠孕育過程，可現場選購。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/pepper-farm.jpg" alt="胡椒園"></div>
+        <div class="attraction-body"><h3>胡椒園</h3><p>富國島胡椒世界聞名，深入農園了解從種植到採收的完整故事。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/temple.jpg" alt="護國寺"></div>
+        <div class="attraction-body"><h3>護國寺</h3><p>島上最古老寺廟，建於 200 年前，融合越南傳統建築與深厚信仰文化。</p></div>
+      </div>
+      <div class="attraction-card">
+        <div class="attraction-img"><img src="images/kiss-bridge.jpg" alt="親吻橋"></div>
+        <div class="attraction-body"><h3>親吻橋</h3><p>日落小鎮內的地標橋樑，夕陽餘暉映照海面，是拍攝浪漫照片的絕佳地點。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="itineraries">
+    <div class="section-header reveal">
+      <span class="section-label" style="color:var(--orange);">Curated Trips</span>
+      <h2>精選五大行程系列</h2>
+    </div>
+    <div class="itinerary-list stagger">
+      <div class="itinerary-item"><div class="itinerary-num">01</div><div class="itinerary-text"><h4>【網美朝聖】纜車與日落小鎮一日遊</h4><p>世界最長纜車、香島水樂園、親吻橋賞最美夕陽。</p></div></div>
+      <div class="itinerary-item"><div class="itinerary-num">02</div><div class="itinerary-text"><h4>【親子歡樂】珍珠主題樂園全日探索</h4><p>珍珠樂園 + 野生動物園，最適合帶小朋友徹底放電。</p></div></div>
+      <div class="itinerary-item"><div class="itinerary-num">03</div><div class="itinerary-text"><h4>【海洋呼吸】三島跳島與浮潛之旅</h4><p>深入指甲島與雲腿島，享受無人島午餐與清澈海水。</p></div></div>
+      <div class="itinerary-item"><div class="itinerary-num">04</div><div class="itinerary-text"><h4>【北島慢活】海星沙灘與大世界不夜城</h4><p>北島原始美景與大世界璀璨夜晚的雙重感官體驗。</p></div></div>
+      <div class="itinerary-item"><div class="itinerary-num">05</div><div class="itinerary-text"><h4>【老饕私房】當地市場美食與夕陽晚宴</h4><p>跟著創辦人尋找道地風味，避開地雷，只吃真正的好味道。</p></div></div>
+    </div>
+  </section>
+
+
+
+  <section class="cta" id="cta">
+    <div class="cta-inner reveal">
+      <span class="section-label">Let's Go</span>
+      <h2>準備好開始您的<br><em>旅程 </em>了嗎？</h2>
+      <p>前往網站查看完整服務、行程報價試算，<br>以及立即填寫客製預約單。</p>
+      <a href="https://tamarind05.github.io/tamarindtravel/" class="cta-btn">
+        進入網站 <i class="fa-solid fa-arrow-right"></i>
+      </a>
+      <p class="cta-note" style="visibility:hidden;">tamarind05.github.io/tamarindtravel</p>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>VN Phu Quoc Travel Studio</strong> &nbsp;—&nbsp; 越南&富國島旅遊工作室 &nbsp;&nbsp;© 2026 All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+
+    // 浮動按鈕：進入 CTA 區塊後隱藏
+    const floatSkip = document.getElementById('float-skip');
+    const ctaSection = document.getElementById('cta');
+    const ctaObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        floatSkip.style.opacity = e.isIntersecting ? '0' : '1';
+        floatSkip.style.pointerEvents = e.isIntersecting ? 'none' : 'auto';
+        floatSkip.style.transform = e.isIntersecting
+          ? 'translateX(-50%) translateY(12px)'
+          : 'translateX(-50%) translateY(0)';
+      });
+    }, { threshold: 0.1 });
+    ctaObserver.observe(ctaSection);
+  </script>
+</body>
+</html>
